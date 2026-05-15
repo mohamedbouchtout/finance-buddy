@@ -2,34 +2,37 @@
 
 > **You think you own the S&P 500. You actually own 7 tech stocks.**
 > Paste your holdings, see your true diversification score with full ETF look-through.
-> Then turn on the algo signal scanner.
 
-Educational investing tool. Two products in one:
+Free, educational portfolio analyzer for retail investors.
 
-1. **Portfolio analyzer** — Mag-7 exposure %, HHI, sector/asset-class look-through, 0–100 diversification score
-2. **Algo Signals (AI)** — self-detecting pattern engine using RBM + CNN-style scoring layered on a 200MA breakout-and-retest framework with volume, MA-slope and risk/reward filters. Free: paper-mode scanner + historical backtest. Pro: a **downloadable desktop app** (Tkinter GUI — start/stop, live signal matrix, risk + AI-confidence sliders, paper or Interactive Brokers live mode) plus a licensed bot bundle for the open-source CLI Algo-Bot.
+- **Mag-7 exposure %** — see how much of your portfolio is really in just 7 companies
+- **Full ETF look-through** — decomposes the top 40 retail ETFs into their underlying holdings
+- **Sector / asset class breakdown** — re-aggregated across stocks *and* funds
+- **0–100 diversification score** — one number that tells you the truth
+- **Free forever for one-off analysis.** Pro ($9/mo or $79/yr) adds saved portfolios, CSV import from any broker, and PDF reports.
 
-### Pro liability waiver
-Live-trading software for retail users carries real risk. The first time a Pro subscriber visits `/bot/app` (or tries to download any bundle) they're sent through `/waiver` — a full assumption-of-risk, release, and indemnification agreement. We record their email, IP, version, and timestamp, store the same metadata inside every downloaded zip (`waiver_acceptance.json` + `WAIVER.txt`), and refuse downloads until acceptance.
+> Educational tool, not investment advice. See [DISCLAIMER.md](./DISCLAIMER.md).
 
-### Bot licensing & subscription enforcement
-Pro bundles include a `license.json` key + `license_check.py` heartbeat script. The bot phones home to `/api/license/verify` on startup and every 30 min. The moment a subscription is canceled (Stripe webhook → `customer.subscription.deleted` / `past_due`), all of that user's licenses are revoked and the next heartbeat fails — the bot exits. Users can also regenerate/revoke manually from `/account/license`. 24-hour offline grace window so brief network blips don't kill the bot.
+## Branches
 
-Pro subscription is $9/mo or $79/yr (save portfolios, CSV import, PDF reports, 200-ticker scans, licensed bot bundle).
+- **`main`** — the public product: free portfolio analyzer. This is what gets deployed.
+- **`algo-bot`** — work-in-progress AI signal scanner + downloadable desktop trading app. Hidden from `main` behind the `ENABLE_BOT_UI` feature flag until it has a public live-money track record.
+- **`v0.1-full-stack`** — tag snapshotting the full original build (analyzer + algo bot together).
+
+To experiment with the algo bot locally on `main`, set `ENABLE_BOT_UI=1` in your `.env`. To work on it for real, check out the `algo-bot` branch.
 
 ---
 
 ## Stack
 - **Python 3.12+** · **FastAPI** · **Jinja2** · **Tailwind (CDN)** · **Chart.js (CDN)**
 - **SQLite** (zero-ops persistence)
-- **yfinance** (free market data, 15-min cache + OHLCV history for the scanner)
+- **yfinance** (free market data, 15-min cache)
 - **Stripe** (Checkout + webhooks)
 - **ReportLab** (PDF export)
 
 ## Quick start (local)
 
 ```powershell
-cd C:\Users\bouchtom\.copilot\session-state\03918fa1-c0e6-4759-9a69-5aca86b7f99e\files\finance-buddy
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
@@ -88,4 +91,4 @@ tests/               — pytest suite
 ```
 
 ## License
-Proprietary — all rights reserved. Not investment advice.
+[MIT](./LICENSE) — see also [DISCLAIMER.md](./DISCLAIMER.md). Not investment advice.

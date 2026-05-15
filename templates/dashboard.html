@@ -7,9 +7,11 @@
   </div>
   <div class="flex gap-2">
     <a href="/analyze" class="btn-secondary">New analysis</a>
+    {% if bot_enabled %}
     <a href="/bot/scan" class="btn-secondary">Run algo scan</a>
     {% if is_pro %}
       <a href="/account/license" class="btn-secondary">Bot license</a>
+    {% endif %}
     {% endif %}
     {% if is_pro and user.stripe_customer_id %}
       <form action="/billing/portal" method="post"><button class="btn-secondary">Manage billing</button></form>

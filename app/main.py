@@ -21,7 +21,7 @@ from app.auth import (
     make_session_cookie, send_magic_link, verify_magic_token,
 )
 from app.config import (
-    APP_BASE_URL, ADMIN_EMAIL, DEV_MODE,
+    APP_BASE_URL, ADMIN_EMAIL, DEV_MODE, ENABLE_BOT_UI,
     STRIPE_PRICE_MONTHLY, STRIPE_PRICE_YEARLY, ROOT,
 )
 from app.csv_import import parse_csv
@@ -49,15 +49,35 @@ app.mount("/static", StaticFiles(directory=str(ROOT / "static")), name="static")
 templates = Jinja2Templates(directory=str(ROOT / "templates"))
 
 
+# When the Algo Bot UI is disabled (default on `main`), 404 every bot-flavored
+# route so the public surface is analyzer-only. The bot code stays in the tree
+# (open source / re-enabled on the `algo-bot` branch) but is unreachable here.
+_BOT_PREFIXES = ("/bot", "/waiver", "/account/license", "/api/license")
+
+
+@app.middleware("http")
+async def _gate_bot_routes(request: Request, call_next):
+    # Re-read flag at request time so tests that monkey-patch config still work.
+    from app import config as _cfg
+    if not _cfg.ENABLE_BOT_UI:
+        path = request.url.path
+        if any(path == p or path.startswith(p + "/") for p in _BOT_PREFIXES):
+            return JSONResponse({"detail": "Not Found"}, status_code=404)
+    return await call_next(request)
+
+
 # ---------- helpers ----------
 def _ctx(request: Request, **extra) -> dict:
     user = current_user(request)
+    # Re-read flag at request time so test overrides take effect.
+    from app import config as _cfg
     return {
         "user": user,
         "is_pro": user_is_pro(user),
         "waiver_accepted": has_accepted_waiver(user),
         "base_url": APP_BASE_URL,
         "dev_mode": DEV_MODE,
+        "bot_enabled": _cfg.ENABLE_BOT_UI,
         **extra,
     }
 

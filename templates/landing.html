@@ -11,14 +11,16 @@
   </h1>
   <p class="mt-8 text-lg md:text-xl text-slate-400 max-w-2xl mx-auto">
     Paste your holdings. Get your true diversification score in 30 seconds — with full ETF look-through.
-    Then turn on the algo signal scanner.
+    {% if bot_enabled %}Then turn on the algo signal scanner.{% endif %}
   </p>
   <div class="mt-10 flex flex-wrap justify-center gap-3">
     <a href="/analyze" class="btn-primary text-base">Analyze my portfolio →</a>
+    {% if bot_enabled %}
     <a href="/bot" class="btn-secondary text-base">
       <span class="inline-block w-2 h-2 rounded-full bg-cc-400 mr-2 animate-pulse"></span>
       Try the algo bot
     </a>
+    {% endif %}
   </div>
   <p class="mt-4 text-xs text-slate-500">No account needed. Free analysis. Educational, not advice.</p>
 </section>
@@ -36,8 +38,8 @@
   </div>
   <div class="card">
     <div class="w-10 h-10 rounded-lg bg-cc-500/10 border border-cc-500/30 flex items-center justify-center text-cc-400 font-bold mb-3">03</div>
-    <h3 class="font-bold text-lg text-white">Score + signals</h3>
-    <p class="text-sm text-slate-400 mt-2">0–100 diversification score, Mag 7 %, plus on-demand 200MA breakout signals.</p>
+    <h3 class="font-bold text-lg text-white">{% if bot_enabled %}Score + signals{% else %}Diversification score{% endif %}</h3>
+    <p class="text-sm text-slate-400 mt-2">0–100 diversification score, Mag 7 %{% if bot_enabled %}, plus on-demand 200MA breakout signals{% endif %}.</p>
   </div>
 </section>
 
@@ -55,8 +57,8 @@
     </p>
     <p>
       This is an educational tool. We don't tell you what to buy or sell. We show you the math
-      behind what you already own — and, with Pro, you can take our signal scanner home and plug it
-      into your own broker.
+      behind what you already own{% if bot_enabled %} — and, with Pro, you can take our signal scanner home and plug it
+      into your own broker{% endif %}.
     </p>
   </div>
 </section>

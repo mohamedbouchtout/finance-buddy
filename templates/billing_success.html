@@ -3,6 +3,7 @@
 <div class="max-w-md mx-auto py-16 text-center">
   <div class="text-6xl mb-4">🎉</div>
   <h1 class="text-4xl font-black tracking-tight"><span class="gradient-text">You're Pro!</span></h1>
+  {% if bot_enabled %}
   <p class="text-slate-400 mt-3">Welcome to Finance Buddy Pro. One quick step before you can
   download the Algo Bot desktop app: please read and sign the liability waiver.</p>
   <div class="flex gap-2 justify-center mt-6 flex-wrap">
@@ -11,6 +12,14 @@
   </div>
   <p class="text-xs text-slate-500 mt-6">Pro also unlocks unlimited portfolios, PDF reports, broker CSV imports,
   200-ticker scans, and the licensed bot bundle.</p>
+  {% else %}
+  <p class="text-slate-400 mt-3">Welcome to Finance Buddy Pro. You now have access to unlimited saved
+  portfolios, broker CSV imports, PDF reports, and priority support.</p>
+  <div class="flex gap-2 justify-center mt-6 flex-wrap">
+    <a href="/dashboard" class="btn-primary">Go to dashboard &rarr;</a>
+    <a href="/analyze" class="btn-secondary">Run an analysis</a>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}
 

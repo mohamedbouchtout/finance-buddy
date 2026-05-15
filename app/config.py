@@ -22,6 +22,12 @@ EMAIL_FROM = os.getenv("EMAIL_FROM", "hello@financebuddy.com")
 
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "")
 
+# Feature flags
+# Default OFF on main — the Algo Bot lives on the `algo-bot` branch and only
+# returns to the public site once it has a live track record. Set
+# ENABLE_BOT_UI=1 locally or on the algo-bot branch to expose it.
+ENABLE_BOT_UI = os.getenv("ENABLE_BOT_UI", "0").lower() in ("1", "true", "yes", "on")
+
 DB_PATH = DATA_DIR / "app.db"
 ETF_DATA_PATH = DATA_DIR / "etfs.json"
 

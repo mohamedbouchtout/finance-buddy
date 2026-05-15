@@ -7,6 +7,10 @@ sys.path.insert(0, str(ROOT))
 
 # Use a separate test DB
 os.environ["APP_SECRET"] = "test-secret"
+# Tests cover the full stack (analyzer + algo bot routes). The bot UI is
+# feature-flagged off in production on main, but tests enable it so the bot
+# route tests continue to exercise the code path.
+os.environ["ENABLE_BOT_UI"] = "1"
 import app.config as cfg
 cfg.DB_PATH = ROOT / "data" / "test_app.db"
 if cfg.DB_PATH.exists():

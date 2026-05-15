@@ -2,7 +2,7 @@
 {% block content %}
 <div class="max-w-3xl mx-auto text-center py-10">
   <h1 class="text-4xl md:text-5xl font-black tracking-tight"><span class="gradient-text">Simple, transparent pricing</span></h1>
-  <p class="text-slate-400 mt-3">Free forever for one-off analysis. Pro unlocks the power features — and real-money algo signals.</p>
+  <p class="text-slate-400 mt-3">Free forever for one-off analysis.{% if bot_enabled %} Pro unlocks the power features — and real-money algo signals.{% else %} Pro unlocks the power features for serious portfolio work.{% endif %}</p>
 </div>
 
 <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
@@ -15,8 +15,10 @@
       <li class="flex gap-2"><span class="text-cc-400">✓</span> Diversification score + Mag 7 exposure</li>
       <li class="flex gap-2"><span class="text-cc-400">✓</span> Sector / asset class breakdown</li>
       <li class="flex gap-2"><span class="text-cc-400">✓</span> ETF look-through (top 40 ETFs)</li>
+      {% if bot_enabled %}
       <li class="flex gap-2"><span class="text-cc-400">✓</span> Algo bot scan — 10 tickers per run</li>
       <li class="flex gap-2"><span class="text-cc-400">✓</span> Historical backtest of any signal</li>
+      {% endif %}
     </ul>
     <a href="/analyze" class="btn-secondary w-full mt-6">Use free version</a>
   </div>
@@ -32,8 +34,10 @@
       <li class="flex gap-2"><span class="text-cc-cyan">✓</span> <strong class="text-white">Save unlimited portfolios</strong></li>
       <li class="flex gap-2"><span class="text-cc-cyan">✓</span> <strong class="text-white">CSV import</strong> from any broker</li>
       <li class="flex gap-2"><span class="text-cc-cyan">✓</span> <strong class="text-white">PDF reports</strong> for your advisor</li>
+      {% if bot_enabled %}
       <li class="flex gap-2"><span class="text-cc-cyan">✓</span> <strong class="text-white">Algo bot — 200 tickers/scan</strong></li>
       <li class="flex gap-2"><span class="text-cc-cyan">✓</span> <strong class="text-white">Real-money bot config download</strong></li>
+      {% endif %}
       <li class="flex gap-2"><span class="text-cc-cyan">✓</span> Priority support</li>
     </ul>
     <form action="/billing/checkout" method="post" class="mt-6 space-y-2">
@@ -51,8 +55,10 @@
   <div class="space-y-3">
     <details class="card"><summary class="font-semibold cursor-pointer text-white">Is this investment advice?</summary>
       <p class="text-sm text-slate-400 mt-2">No. We provide objective data and educational context only. We don't tell you what to buy or sell.</p></details>
+    {% if bot_enabled %}
     <details class="card"><summary class="font-semibold cursor-pointer text-white">Do you execute trades for me?</summary>
       <p class="text-sm text-slate-400 mt-2">No. Pro users download a bot config they run locally against their own Interactive Brokers account. Your keys, your account, your trades.</p></details>
+    {% endif %}
     <details class="card"><summary class="font-semibold cursor-pointer text-white">How current are the ETF holdings?</summary>
       <p class="text-sm text-slate-400 mt-2">Quarterly refresh from provider disclosures. Prices are live with a 15-min cache.</p></details>
     <details class="card"><summary class="font-semibold cursor-pointer text-white">Can I cancel anytime?</summary>

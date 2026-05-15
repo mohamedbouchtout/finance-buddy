@@ -49,9 +49,11 @@
       </a>
       <nav class="flex items-center gap-1 text-sm">
         <a href="/analyze" class="px-3 py-1.5 rounded-lg hover:bg-white/5 transition text-slate-300 hover:text-white">Analyze</a>
+        {% if bot_enabled %}
         <a href="/bot" class="px-3 py-1.5 rounded-lg hover:bg-white/5 transition text-slate-300 hover:text-white flex items-center gap-1.5">
           Algo Bot <span class="text-[10px] px-1.5 py-0.5 rounded bg-cc-500/20 text-cc-400 border border-cc-500/30 font-semibold">NEW</span>
         </a>
+        {% endif %}
         <a href="/pricing" class="px-3 py-1.5 rounded-lg hover:bg-white/5 transition text-slate-300 hover:text-white">Pricing</a>
         {% if user %}
           <a href="/dashboard" class="px-3 py-1.5 rounded-lg hover:bg-white/5 transition text-slate-300 hover:text-white">Dashboard</a>
@@ -79,7 +81,7 @@
       <div class="space-x-5">
         <a href="/pricing" class="hover:text-cc-400 transition">Pricing</a>
         <a href="/analyze" class="hover:text-cc-400 transition">Analyze</a>
-        <a href="/bot" class="hover:text-cc-400 transition">Algo Bot</a>
+        {% if bot_enabled %}<a href="/bot" class="hover:text-cc-400 transition">Algo Bot</a>{% endif %}
         <a href="mailto:hello@financebuddy.com" class="hover:text-cc-400 transition">Contact</a>
       </div>
     </div>

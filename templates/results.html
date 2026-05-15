@@ -129,7 +129,7 @@
       <ul class="mt-3 space-y-1 text-sm text-slate-300">
         <li>✓ Save multiple portfolios &amp; track drift over time</li>
         <li>✓ Export full PDF report</li>
-        <li>✓ <strong class="text-white">Algo bot config download</strong> — plug into your IB account</li>
+        {% if bot_enabled %}<li>✓ <strong class="text-white">Algo bot config download</strong> — plug into your IB account</li>{% endif %}
         <li>✓ CSV import from any broker</li>
       </ul>
     </div>
