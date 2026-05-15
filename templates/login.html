@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-md mx-auto py-10">
+  <h1 class="text-3xl font-black tracking-tight text-white">Sign in</h1>
+  <p class="text-slate-400 mt-1 mb-6 text-sm">We'll email you a one-time sign-in link. No password.</p>
+
+  {% if sent %}
+    <div class="card" style="border-color:rgba(16,185,129,.35); background:rgba(16,185,129,.06);">
+      <h2 class="font-bold text-emerald-300">Check your email</h2>
+      <p class="text-sm text-emerald-200/80 mt-1">Sent a sign-in link to <b>{{ sent_to }}</b>. It expires in 15 minutes.</p>
+      {% if dev_mode %}<p class="text-xs text-emerald-200/60 mt-3">Dev mode: the link was printed to the server console.</p>{% endif %}
+    </div>
+  {% else %}
+    {% if error %}<div class="mb-3 p-2 rounded bg-red-500/10 border border-red-500/30 text-red-300 text-sm">{{ error }}</div>{% endif %}
+    <form method="post" action="/login" class="card space-y-3">
+      <input type="email" name="email" required placeholder="you@example.com" />
+      <input type="hidden" name="next" value="{{ next }}" />
+      <button class="btn-primary w-full">Email me a sign-in link</button>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}
+

@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+  <div class="flex items-center justify-between flex-wrap gap-3">
+    <h1 class="text-3xl md:text-4xl font-black tracking-tight">
+      Scan results <span class="text-slate-500 font-light">— {{ scanned }} scanned</span>
+    </h1>
+    <a href="/bot/scan" class="btn-secondary">New scan</a>
+  </div>
+
+  {% if warn %}<div class="mt-4 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-sm">{{ warn }}</div>{% endif %}
+
+  <div class="grid md:grid-cols-3 gap-4 mt-6">
+    <div class="card text-center">
+      <div class="text-xs text-slate-500 uppercase tracking-wider">AI predictions</div>
+      <div class="text-4xl font-black gradient-text mt-2">{{ predictions|length }}</div>
+    </div>
+    <div class="card text-center">
+      <div class="text-xs text-slate-500 uppercase tracking-wider">Tickers scanned</div>
+      <div class="text-4xl font-black text-white mt-2">{{ scanned }}</div>
+    </div>
+    <div class="card text-center">
+      <div class="text-xs text-slate-500 uppercase tracking-wider">Errors</div>
+      <div class="text-4xl font-black text-white mt-2">{{ errors|length }}</div>
+    </div>
+  </div>
+
+  {% if predictions %}
+  <div class="card mt-6 overflow-x-auto">
+    <h2 class="text-xl font-bold text-white mb-1">AI predictions</h2>
+    <p class="text-slate-400 text-sm mb-4">Pretrained multi-factor model — every ticker scored 0&ndash;100 (50 = neutral). Sorted by conviction.</p>
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left">
+          <th class="py-2">Symbol</th><th>Score</th><th>Direction</th><th>Setup</th><th>Conf.</th>
+          <th>Entry</th><th>Stop</th><th>Target</th><th>R:R</th><th>RSI</th><th>Mom 20d</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for p in predictions %}
+        <tr class="hover:bg-white/[0.03] transition">
+          <td class="py-2 font-mono font-semibold text-white">{{ p.symbol }}</td>
+          <td class="font-mono font-bold {% if p.score >= 65 %}text-green-400{% elif p.score <= 35 %}text-red-400{% else %}text-slate-300{% endif %}">{{ "%.1f"|format(p.score) }}</td>
+          <td>
+            {% if p.direction == 'BULLISH' %}
+              <span class="px-2 py-0.5 rounded text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/30">BULLISH</span>
+            {% elif p.direction == 'BEARISH' %}
+              <span class="px-2 py-0.5 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/30">BEARISH</span>
+            {% else %}
+              <span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-500/10 text-slate-400 border border-slate-500/30">NEUTRAL</span>
+            {% endif %}
+          </td>
+          <td class="text-slate-300">{{ p.setup_type }}</td>
+          <td>
+            {% if p.confidence == 'HIGH' %}
+              <span class="text-cc-cyan font-bold text-xs">HIGH</span>
+            {% elif p.confidence == 'MEDIUM' %}
+              <span class="text-cc-400 font-semibold text-xs">MED</span>
+            {% else %}
+              <span class="text-slate-500 text-xs">LOW</span>
+            {% endif %}
+          </td>
+          <td class="font-mono">${{ "%.2f"|format(p.entry) }}</td>
+          <td class="font-mono text-red-300">${{ "%.2f"|format(p.stop) }}</td>
+          <td class="font-mono text-green-300">${{ "%.2f"|format(p.target) }}</td>
+          <td class="font-mono">{{ "%.2f"|format(p.rr) }}</td>
+          <td class="font-mono text-slate-400">{{ "%.0f"|format(p.features.rsi) }}</td>
+          <td class="font-mono text-slate-400">{{ "%.1f"|format(p.features.momentum_20d_pct) }}%</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="card mt-6 text-center text-slate-400">
+    No predictions could be generated — most likely the scanned tickers don't have enough price history (need ~60 trading days minimum).
+  </div>
+  {% endif %}
+
+  {% if signals %}
+  <div class="card mt-6 overflow-x-auto">
+    <h2 class="text-xl font-bold text-white mb-1">High-conviction 200MA retest signals <span class="text-cc-cyan text-xs font-normal">PRO</span></h2>
+    <p class="text-slate-400 text-sm mb-4">Strict deterministic pattern detector — the same logic that runs in your downloadable bot.</p>
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left">
+          <th class="py-2">Symbol</th><th>Type</th><th>Entry</th><th>Stop</th><th>Target</th>
+          <th>R:R</th><th>Breakout</th><th>Retest</th><th>MA slope</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for s in signals %}
+        <tr class="hover:bg-white/[0.03] transition">
+          <td class="py-2 font-mono font-semibold text-white">{{ s.symbol }}</td>
+          <td>
+            {% if s.type == 'LONG' %}
+              <span class="px-2 py-0.5 rounded text-xs font-bold bg-green-500/10 text-green-400 border border-green-500/30">LONG</span>
+            {% else %}
+              <span class="px-2 py-0.5 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/30">SHORT</span>
+            {% endif %}
+          </td>
+          <td class="font-mono">${{ "%.2f"|format(s.entry) }}</td>
+          <td class="font-mono text-red-300">${{ "%.2f"|format(s.stop) }}</td>
+          <td class="font-mono text-green-300">${{ "%.2f"|format(s.target) }}</td>
+          <td class="font-mono">{{ "%.2f"|format(s.reward / s.risk if s.risk else 0) }}</td>
+          <td class="text-slate-400 font-mono">{{ s.breakout_date }}</td>
+          <td class="text-slate-400 font-mono">{{ s.retest_date }}</td>
+          <td class="font-mono">{{ "%.2f"|format(s.ma_slope_pct) }}%</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  {% if backtest %}
+  <div class="card mt-6">
+    <h2 class="text-xl font-bold text-white mb-1">AI predictor backtest &mdash; {{ backtest_symbol }}</h2>
+    {% if backtest.error %}
+      <p class="text-amber-300 text-sm">{{ backtest.error }}</p>
+    {% else %}
+      <p class="text-slate-400 text-sm mb-4">Walk-forward simulation of the pretrained AI predictor on {{ backtest_symbol }} &mdash; $10,000 starting capital, 5% risk per trade, score threshold {{ "%.0f"|format(backtest.score_threshold or 65) }}.</p>
+      <div class="grid md:grid-cols-5 gap-3">
+        <div class="card !p-3"><div class="text-xs text-slate-500">Trades</div><div class="text-2xl font-bold text-white">{{ backtest.n_trades }}</div></div>
+        <div class="card !p-3"><div class="text-xs text-slate-500">Win rate</div><div class="text-2xl font-bold text-white">{{ "%.0f"|format(backtest.win_rate * 100) }}%</div></div>
+        <div class="card !p-3"><div class="text-xs text-slate-500">Avg R</div><div class="text-2xl font-bold {{ 'text-green-400' if backtest.avg_r >= 0 else 'text-red-400' }}">{{ "%.2f"|format(backtest.avg_r) }}</div></div>
+        <div class="card !p-3"><div class="text-xs text-slate-500">Max DD</div><div class="text-2xl font-bold text-red-300">{{ "%.1f"|format(backtest.max_drawdown * 100) }}%</div></div>
+        <div class="card !p-3"><div class="text-xs text-slate-500">Total return</div><div class="text-2xl font-bold {{ 'text-green-400' if backtest.total_return_pct >= 0 else 'text-red-400' }}">{{ "%.1f"|format(backtest.total_return_pct) }}%</div></div>
+      </div>
+      <div class="mt-5"><canvas id="equity-curve" height="100"></canvas></div>
+      <script id="eq-data" type="application/json">{{ backtest.equity_curve|tojson }}</script>
+      <script>
+        (function(){
+          const pts = JSON.parse(document.getElementById('eq-data').textContent);
+          const ctx = document.getElementById('equity-curve').getContext('2d');
+          const grad = ctx.createLinearGradient(0,0,0,300);
+          grad.addColorStop(0,'rgba(59,130,246,.45)'); grad.addColorStop(1,'rgba(59,130,246,0)');
+          new Chart(ctx, {
+            type: 'line',
+            data: { labels: pts.map(p=>p.date), datasets: [{
+              label: 'Equity', data: pts.map(p=>p.equity),
+              borderColor:'#3b82f6', backgroundColor: grad, fill: true,
+              pointRadius: 0, tension: 0.25, borderWidth: 2,
+            }]},
+            options: { responsive: true, plugins:{legend:{display:false}},
+              scales:{ x:{ ticks:{ color:'#64748b', maxTicksLimit:8 }, grid:{color:'rgba(255,255,255,.04)'} },
+                       y:{ ticks:{ color:'#64748b' }, grid:{color:'rgba(255,255,255,.04)'} } } }
+          });
+        })();
+      </script>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <div class="card mt-6">
+    <div class="flex items-center justify-between flex-wrap gap-3">
+      <div>
+        <h2 class="text-xl font-bold text-white">Take this home</h2>
+        <p class="text-slate-400 text-sm">Pro members can download a bot config bundle to plug into their local Algo-Bot + Interactive Brokers.</p>
+      </div>
+      {% if plan == 'pro' %}
+      <form method="post" action="/bot/live-config">
+        <input type="hidden" name="tickers_json" value='{{ tickers_json }}' />
+        <button class="btn-primary">Download bot config ↓</button>
+      </form>
+      {% else %}
+      <a href="/pricing?reason=bot_live" class="btn-primary">Upgrade to download</a>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if errors %}
+  <details class="mt-6">
+    <summary class="cursor-pointer text-sm text-slate-500 hover:text-slate-300">Show {{ errors|length }} error(s)</summary>
+    <ul class="mt-3 text-xs text-slate-500 font-mono space-y-1">
+      {% for e in errors %}<li>{{ e }}</li>{% endfor %}
+    </ul>
+  </details>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Download the Algo Bot — Finance Buddy{% endblock %}
+{% block content %}
+<section class="max-w-3xl mx-auto">
+  <span class="score-pill mb-3">
+    <span class="w-1.5 h-1.5 rounded-full bg-cc-cyan animate-pulse"></span>
+    Pro download &mdash; desktop application
+  </span>
+  <h1 class="text-3xl md:text-4xl font-black tracking-tight">
+    <span class="gradient-text">Algo Bot Desktop</span> &mdash; Windows / macOS / Linux
+  </h1>
+  <p class="text-slate-400 mt-2">
+    A self-contained application with a graphical interface. Start &amp; stop the bot,
+    watch the live signal matrix, tune risk per trade and the AI confidence threshold,
+    and let it paper-trade or route orders to your own Interactive Brokers account.
+  </p>
+
+  <div class="grid md:grid-cols-2 gap-5 mt-8">
+    <div class="card">
+      <h3 class="font-bold text-white text-lg">What's in the download</h3>
+      <ul class="text-sm text-slate-300 space-y-2 mt-3">
+        <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> <code class="text-cc-400">bot_app.py</code> &mdash; the Tkinter desktop GUI</li>
+        <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> The pretrained AI predictor + 200MA strategy</li>
+        <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> Your licensed config + watchlist</li>
+        <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> One-click <code class="text-cc-400">run.bat</code> launcher (Windows)</li>
+        <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> A signed copy of your liability waiver</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3 class="font-bold text-white text-lg">In-app controls</h3>
+      <ul class="text-sm text-slate-300 space-y-2 mt-3">
+        <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> Start / Stop the scan loop</li>
+        <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> Live <em>Signal Matrix</em> for every ticker</li>
+        <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> Risk-per-trade slider (0.1% &ndash; 5%)</li>
+        <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> AI confidence threshold slider (50% &ndash; 95%)</li>
+        <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> Max simultaneous positions + scan interval</li>
+        <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> Paper mode by default, Live mode via IB Gateway</li>
+      </ul>
+    </div>
+  </div>
+
+  {% if not waiver_accepted %}
+    <div class="card mt-8 border-amber-500/30 bg-amber-500/[0.04]">
+      <h2 class="text-amber-300 font-bold">&#9888; Sign the waiver first</h2>
+      <p class="text-amber-200/80 text-sm mt-2">
+        Before we hand over an application that places real orders, you have to read and accept
+        the Pro liability waiver. It's a one-time step.
+      </p>
+      <a href="/waiver?next=/bot/app" class="btn-primary mt-4 inline-block">Read &amp; sign the waiver &rarr;</a>
+    </div>
+  {% else %}
+    <div class="card mt-8 border-cc-cyan/30">
+      <h2 class="text-white font-bold">You're cleared to download</h2>
+      <p class="text-slate-400 text-sm mt-2">
+        Waiver accepted as <strong class="text-white">{{ user.email }}</strong>
+        on {{ accepted_at_str }} (version {{ accepted_version }}).
+      </p>
+      <form action="/bot/app/download" method="post" class="mt-4">
+        <label class="block text-xs text-slate-500 mb-1">Watchlist (one ticker per line)</label>
+        <textarea name="tickers_text" rows="4"
+                  class="w-full bg-ink-800 border border-white/10 rounded p-2 font-mono text-sm text-slate-200">{{ default_tickers }}</textarea>
+        <button class="btn-primary w-full mt-4">Download Algo Bot ({{ approx_size_kb }} KB zip) &darr;</button>
+      </form>
+    </div>
+  {% endif %}
+
+  <div class="card mt-6 text-xs text-slate-500">
+    Need to connect to Interactive Brokers? Install the optional <code class="text-cc-400">ib_insync</code>
+    package after unzipping (<code>pip install ib_insync</code>), then start TWS or IB Gateway in
+    <strong class="text-white">paper</strong> mode and use the "Connect IB&hellip;" button in the app.
+    Always test for several weeks before flipping to a live account.
+  </div>
+</section>
+{% endblock %}

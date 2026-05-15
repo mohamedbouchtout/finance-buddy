@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-3xl mx-auto text-center py-10">
+  <h1 class="text-4xl md:text-5xl font-black tracking-tight"><span class="gradient-text">Simple, transparent pricing</span></h1>
+  <p class="text-slate-400 mt-3">Free forever for one-off analysis. Pro unlocks the power features — and real-money algo signals.</p>
+</div>
+
+<div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+  <div class="card">
+    <h2 class="font-bold text-xl text-white">Free</h2>
+    <div class="text-5xl font-black mt-2 text-white">$0</div>
+    <p class="text-slate-500 text-sm">Forever</p>
+    <ul class="mt-5 space-y-2 text-sm text-slate-300">
+      <li class="flex gap-2"><span class="text-cc-400">✓</span> Unlimited portfolio analyses</li>
+      <li class="flex gap-2"><span class="text-cc-400">✓</span> Diversification score + Mag 7 exposure</li>
+      <li class="flex gap-2"><span class="text-cc-400">✓</span> Sector / asset class breakdown</li>
+      <li class="flex gap-2"><span class="text-cc-400">✓</span> ETF look-through (top 40 ETFs)</li>
+      <li class="flex gap-2"><span class="text-cc-400">✓</span> Algo bot scan — 10 tickers per run</li>
+      <li class="flex gap-2"><span class="text-cc-400">✓</span> Historical backtest of any signal</li>
+    </ul>
+    <a href="/analyze" class="btn-secondary w-full mt-6">Use free version</a>
+  </div>
+
+  <div class="card relative overflow-hidden" style="border-color:rgba(59,130,246,.55);">
+    <div class="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-cc-500/30 blur-3xl"></div>
+    <span class="absolute -top-3 left-6 px-2.5 py-1 bg-gradient-to-r from-cc-500 to-cc-cyan text-white text-xs font-bold rounded shadow-glow">RECOMMENDED</span>
+    <h2 class="font-bold text-xl text-white">Pro</h2>
+    <div class="text-5xl font-black mt-2 gradient-text">$9<span class="text-base font-medium text-slate-500"> /mo</span></div>
+    <p class="text-slate-500 text-sm">or $79/year (save 27%)</p>
+    <ul class="mt-5 space-y-2 text-sm text-slate-300">
+      <li class="flex gap-2"><span class="text-cc-cyan">✓</span> Everything in Free</li>
+      <li class="flex gap-2"><span class="text-cc-cyan">✓</span> <strong class="text-white">Save unlimited portfolios</strong></li>
+      <li class="flex gap-2"><span class="text-cc-cyan">✓</span> <strong class="text-white">CSV import</strong> from any broker</li>
+      <li class="flex gap-2"><span class="text-cc-cyan">✓</span> <strong class="text-white">PDF reports</strong> for your advisor</li>
+      <li class="flex gap-2"><span class="text-cc-cyan">✓</span> <strong class="text-white">Algo bot — 200 tickers/scan</strong></li>
+      <li class="flex gap-2"><span class="text-cc-cyan">✓</span> <strong class="text-white">Real-money bot config download</strong></li>
+      <li class="flex gap-2"><span class="text-cc-cyan">✓</span> Priority support</li>
+    </ul>
+    <form action="/billing/checkout" method="post" class="mt-6 space-y-2">
+      <button name="plan" value="monthly" class="btn-primary w-full">Start Monthly — $9</button>
+      <button name="plan" value="yearly" class="btn-secondary w-full">Start Yearly — $79 (save 27%)</button>
+    </form>
+    {% if not user %}
+    <p class="text-xs text-slate-500 mt-3 text-center">You'll sign in first, then check out.</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="max-w-3xl mx-auto mt-14">
+  <h2 class="text-2xl font-bold mb-4 text-white">Frequently asked</h2>
+  <div class="space-y-3">
+    <details class="card"><summary class="font-semibold cursor-pointer text-white">Is this investment advice?</summary>
+      <p class="text-sm text-slate-400 mt-2">No. We provide objective data and educational context only. We don't tell you what to buy or sell.</p></details>
+    <details class="card"><summary class="font-semibold cursor-pointer text-white">Do you execute trades for me?</summary>
+      <p class="text-sm text-slate-400 mt-2">No. Pro users download a bot config they run locally against their own Interactive Brokers account. Your keys, your account, your trades.</p></details>
+    <details class="card"><summary class="font-semibold cursor-pointer text-white">How current are the ETF holdings?</summary>
+      <p class="text-sm text-slate-400 mt-2">Quarterly refresh from provider disclosures. Prices are live with a 15-min cache.</p></details>
+    <details class="card"><summary class="font-semibold cursor-pointer text-white">Can I cancel anytime?</summary>
+      <p class="text-sm text-slate-400 mt-2">Yes — from your dashboard. You keep access until the end of the period.</p></details>
+  </div>
+</div>
+{% endblock %}
+

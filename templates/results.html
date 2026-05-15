@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block title %}Score: {{ analysis.score }}/100 · Finance Buddy{% endblock %}
+{% block content %}
+{% set score = analysis.score %}
+{% set color = "text-emerald-400" if score >= 65 else ("text-amber-400" if score >= 45 else "text-red-400") %}
+{% set ring = "stroke-emerald-400" if score >= 65 else ("stroke-amber-400" if score >= 45 else "stroke-red-400") %}
+
+<div class="grid md:grid-cols-3 gap-6 mb-8">
+  <div class="card md:col-span-1 flex flex-col items-center justify-center text-center">
+    <div class="relative w-44 h-44">
+      <svg viewBox="0 0 120 120" class="w-44 h-44 -rotate-90">
+        <circle cx="60" cy="60" r="50" stroke="rgba(255,255,255,.08)" stroke-width="12" fill="none"/>
+        <circle cx="60" cy="60" r="50" class="{{ ring }}" stroke-width="12" fill="none"
+          stroke-linecap="round" stroke-dasharray="{{ (score * 3.14159) | round(1) }} 1000"/>
+      </svg>
+      <div class="absolute inset-0 flex flex-col items-center justify-center">
+        <div class="text-5xl font-black {{ color }}">{{ score }}</div>
+        <div class="text-xs uppercase tracking-wider text-slate-500">/ 100</div>
+      </div>
+    </div>
+    <div class="mt-3 font-semibold {{ color }}">{{ analysis.score_band }}</div>
+    <div class="text-xs text-slate-500 mt-1">Higher = more diversified</div>
+  </div>
+
+  <div class="card md:col-span-2 grid grid-cols-2 gap-4">
+    <div>
+      <div class="text-xs uppercase text-slate-500 tracking-wider">Portfolio value</div>
+      <div class="text-2xl font-bold text-white">${{ "{:,.0f}".format(analysis.total_value) }}</div>
+    </div>
+    <div>
+      <div class="text-xs uppercase text-slate-500 tracking-wider">Magnificent 7 exposure</div>
+      <div class="text-2xl font-bold {{ 'text-red-400' if analysis.mag7_exposure >= 0.30 else 'text-white' }}">
+        {{ "{:.1f}%".format(analysis.mag7_exposure * 100) }}
+      </div>
+      <div class="text-xs text-slate-500">AAPL, MSFT, NVDA, AMZN, META, GOOGL/GOOG, TSLA</div>
+    </div>
+    <div>
+      <div class="text-xs uppercase text-slate-500 tracking-wider">HHI (concentration)</div>
+      <div class="text-2xl font-bold text-white">{{ "{:.4f}".format(analysis.hhi) }}</div>
+      <div class="text-xs text-slate-500">Lower is better. 0.01 ≈ 100 equal positions.</div>
+    </div>
+    <div>
+      <div class="text-xs uppercase text-slate-500 tracking-wider">Positions</div>
+      <div class="text-2xl font-bold text-white">{{ analysis.positions | length }}</div>
+    </div>
+  </div>
+</div>
+
+{% if analysis.warnings %}
+<div class="mb-6 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-200 text-sm">
+  {% for w in analysis.warnings %}<div>⚠️ {{ w }}</div>{% endfor %}
+</div>
+{% endif %}
+
+{% if analysis.insights %}
+<div class="card mb-8">
+  <h2 class="font-bold text-lg mb-3 text-white">Educational Insights</h2>
+  <ul class="space-y-2">
+    {% for i in analysis.insights %}
+    <li class="flex gap-2"><span>💡</span><span class="text-slate-300">{{ i }}</span></li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<div class="grid md:grid-cols-2 gap-6 mb-8">
+  <div class="card">
+    <h3 class="font-bold mb-3 text-white">Asset Class Mix</h3>
+    <canvas id="acChart" height="200"></canvas>
+  </div>
+  <div class="card">
+    <h3 class="font-bold mb-3 text-white">Sector Mix (look-through)</h3>
+    <canvas id="secChart" height="200"></canvas>
+  </div>
+</div>
+
+<div class="grid md:grid-cols-2 gap-6 mb-8">
+  <div class="card">
+    <h3 class="font-bold mb-3 text-white">Top Positions</h3>
+    <table class="w-full text-sm">
+      <thead class="text-xs uppercase text-slate-500">
+        <tr><th class="text-left py-2">Ticker</th><th class="text-right">Value</th><th class="text-right">Weight</th></tr>
+      </thead>
+      <tbody>
+        {% for p in analysis.positions[:15] %}
+        <tr>
+          <td class="py-2 font-mono text-slate-200">{{ p.ticker }}{% if p.is_etf %}<span class="ml-1 text-xs px-1.5 py-0.5 bg-cc-500/15 text-cc-400 border border-cc-500/30 rounded">ETF</span>{% endif %}</td>
+          <td class="text-right">${{ "{:,.0f}".format(p.value) }}</td>
+          <td class="text-right">{{ "{:.2f}%".format(p.weight * 100) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h3 class="font-bold mb-3 text-white">Top Single-Stock Exposure (effective)</h3>
+    <p class="text-xs text-slate-500 mb-3">After looking through your ETFs to their underlying holdings.</p>
+    <table class="w-full text-sm">
+      <thead class="text-xs uppercase text-slate-500">
+        <tr><th class="text-left py-2">Ticker</th><th class="text-right">Effective Weight</th></tr>
+      </thead>
+      <tbody>
+        {% for t, w in analysis.single_stock_top %}
+        <tr>
+          <td class="py-2 font-mono text-slate-200">{{ t }}{% if t in ['AAPL','MSFT','NVDA','AMZN','META','GOOGL','GOOG','TSLA'] %} <span class="text-xs text-amber-400">★ Mag 7</span>{% endif %}</td>
+          <td class="text-right">{{ "{:.2f}%".format(w * 100) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card text-center mb-8">
+  <h3 class="font-bold text-lg mb-2 text-white">Share your score</h3>
+  <p class="text-sm text-slate-400 mb-4">Post it on Reddit, X, or send to a friend.</p>
+  <div class="flex gap-2 justify-center flex-wrap">
+    <a href="https://twitter.com/intent/tweet?text=My%20portfolio%20diversification%20score%20is%20{{ analysis.score }}%2F100%20({{ analysis.score_band|urlencode }})%20%E2%80%94%20with%20{{ '%.1f' % (analysis.mag7_exposure * 100) }}%25%20Mag%207%20exposure.%20Check%20yours%3A&url={{ base_url }}"
+       target="_blank" class="btn-secondary">Share on X</a>
+    <a href="/share/{{ analysis.score }}" target="_blank" class="btn-secondary">Shareable card</a>
+  </div>
+</div>
+
+<div class="card relative overflow-hidden">
+  <div class="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-cc-500/20 blur-3xl"></div>
+  <div class="grid md:grid-cols-2 gap-4 items-center relative">
+    <div>
+      <h3 class="font-black text-2xl text-white">Get the full report</h3>
+      <ul class="mt-3 space-y-1 text-sm text-slate-300">
+        <li>✓ Save multiple portfolios &amp; track drift over time</li>
+        <li>✓ Export full PDF report</li>
+        <li>✓ <strong class="text-white">Algo bot config download</strong> — plug into your IB account</li>
+        <li>✓ CSV import from any broker</li>
+      </ul>
+    </div>
+    <div class="text-right">
+      {% if is_pro %}
+        <form action="/export/pdf" method="post">
+          <input type="hidden" name="holdings_json" value='{{ holdings_json }}' />
+          <input type="hidden" name="name" value="{{ portfolio_name|default('My Portfolio') }}" />
+          <button class="btn-primary">Export PDF →</button>
+        </form>
+        <form action="/portfolios/save" method="post" class="mt-3">
+          <input type="hidden" name="holdings_json" value='{{ holdings_json }}' />
+          <input type="text" name="name" placeholder="Portfolio name" required />
+          <button class="btn-secondary w-full mt-2">Save portfolio</button>
+        </form>
+      {% else %}
+        <a href="/pricing" class="btn-primary">Upgrade to Pro — $9/mo</a>
+        <p class="text-xs text-slate-500 mt-2">Or $79/year (save 27%)</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<p class="text-xs text-slate-500 text-center mt-8">
+  Finance Buddy is an educational tool. Not investment advice. ETF holdings are a periodic snapshot.
+</p>
+
+<script>
+  const acData = {{ analysis.asset_class_mix | tojson }};
+  const secData = {{ analysis.sector_mix | tojson }};
+  const palette = ['#3b82f6','#06b6d4','#8b5cf6','#10b981','#f59e0b','#ef4444','#14b8a6','#6366f1','#ec4899','#84cc16','#f97316'];
+  Chart.defaults.color = '#94a3b8';
+  Chart.defaults.borderColor = 'rgba(255,255,255,.06)';
+  function pie(canvasId, data) {
+    const entries = Object.entries(data).sort((a,b)=>b[1]-a[1]);
+    new Chart(document.getElementById(canvasId), {
+      type: 'doughnut',
+      data: { labels: entries.map(e => e[0]), datasets: [{
+        data: entries.map(e => (e[1]*100).toFixed(2)),
+        backgroundColor: palette, borderColor: '#0b0d12', borderWidth: 2,
+      }]},
+      options: { plugins: { legend: { position: 'right', labels: { boxWidth: 10, color:'#cbd5e1', font: { size: 11 } } },
+        tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.parsed}%` } } } }
+    });
+  }
+  pie('acChart', acData); pie('secChart', secData);
+</script>
+{% endblock %}
+

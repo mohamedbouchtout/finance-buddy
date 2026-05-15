@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="max-w-3xl mx-auto">
+  <div class="flex items-center justify-between flex-wrap gap-3 mb-4">
+    <div>
+      <h1 class="text-3xl md:text-4xl font-black tracking-tight">
+        <span class="gradient-text">Your bot license</span>
+      </h1>
+      <p class="text-slate-400 mt-1 text-sm">
+        The downloadable bot uses this key to verify your subscription on every heartbeat.
+      </p>
+    </div>
+    <span class="score-pill" style="border-color:rgba(6,182,212,.35); background:rgba(6,182,212,.1); color:#67e8f9;">
+      Pro
+    </span>
+  </div>
+
+  {% if request.query_params.get('regenerated') %}
+  <div class="card mb-4 border-cc-cyan/30 bg-cc-cyan/[0.04]">
+    <p class="text-cc-cyan text-sm">
+      &#10003; New license issued. Re-download your bot config to pick it up.
+      Any previously-downloaded bots will stop on their next heartbeat.
+    </p>
+  </div>
+  {% endif %}
+  {% if request.query_params.get('revoked') %}
+  <div class="card mb-4 border-amber-500/30 bg-amber-500/[0.04]">
+    <p class="text-amber-200 text-sm">
+      &#10003; All licenses revoked. Any running bot will stop on its next heartbeat.
+    </p>
+  </div>
+  {% endif %}
+
+  <div class="card">
+    <div class="text-xs uppercase tracking-wider text-slate-500 mb-1">Active license key</div>
+    <div class="font-mono text-lg text-white break-all">{{ active.key }}</div>
+    <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+      <div>
+        <div class="text-slate-500 text-xs uppercase tracking-wider">Issued</div>
+        <div class="text-slate-200">
+          {{ active.issued_at | int }}
+        </div>
+      </div>
+      <div>
+        <div class="text-slate-500 text-xs uppercase tracking-wider">Last heartbeat</div>
+        <div class="text-slate-200">
+          {% if active.last_seen_at %}
+            {{ active.last_seen_at | int }}
+            {% if active.last_seen_ip %}<span class="text-slate-500">&middot; {{ active.last_seen_ip }}</span>{% endif %}
+          {% else %}
+            <span class="text-slate-500">never &mdash; download the bot to begin</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a href="/bot/scan" class="btn-primary">Run a scan &amp; download bot</a>
+      <form method="post" action="/account/license/regenerate" class="inline">
+        <button type="submit" class="btn-secondary">Regenerate key</button>
+      </form>
+      <form method="post" action="/account/license/revoke" class="inline"
+            onsubmit="return confirm('Revoke all licenses? Your running bot(s) will stop within minutes.');">
+        <button type="submit" class="btn-ghost text-rose-300 hover:text-rose-200">Revoke all</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="card mt-6">
+    <h3 class="font-bold text-white">Verify endpoint</h3>
+    <p class="text-slate-400 text-sm mt-1">
+      Your bot phones this URL with its key on every heartbeat.
+    </p>
+    <code class="block mt-3 font-mono text-xs text-cc-cyan bg-black/40 rounded p-3 break-all">
+      POST {{ verify_url }}
+    </code>
+  </div>
+
+  {% if licenses|length > 1 %}
+  <div class="card mt-6">
+    <h3 class="font-bold text-white mb-3">License history</h3>
+    <table class="w-full text-sm">
+      <thead class="text-xs uppercase tracking-wider text-slate-500">
+        <tr><th class="text-left py-2">Key</th><th class="text-left">Status</th><th class="text-left">Issued</th><th class="text-left">Revoked</th></tr>
+      </thead>
+      <tbody>
+        {% for lic in licenses %}
+        <tr class="border-t border-white/5">
+          <td class="py-2 font-mono text-xs text-slate-300">{{ lic.key }}</td>
+          <td class="text-slate-300">
+            {% if lic.status == 'active' %}
+              <span class="text-cc-cyan">active</span>
+            {% else %}
+              <span class="text-slate-500">{{ lic.status }}</span>
+            {% endif %}
+          </td>
+          <td class="text-slate-400">{{ lic.issued_at | int }}</td>
+          <td class="text-slate-400">{{ lic.revoked_at or '&mdash;' | safe }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  <div class="text-center mt-8">
+    <a href="/dashboard" class="text-cc-400 hover:text-cc-cyan text-sm">&larr; Back to dashboard</a>
+  </div>
+</section>
+{% endblock %}

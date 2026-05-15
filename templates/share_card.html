@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Score: {{ score }}/100 · Finance Buddy{% endblock %}
+{% block content %}
+<div class="max-w-xl mx-auto text-center py-10">
+  {% set color = "text-emerald-400" if score >= 65 else ("text-amber-400" if score >= 45 else "text-red-400") %}
+  <div class="card">
+    <p class="uppercase tracking-wider text-xs text-slate-500">My diversification score</p>
+    <div class="text-7xl font-black {{ color }} my-3">{{ score }}<span class="text-2xl text-slate-500">/100</span></div>
+    <p class="font-semibold {{ color }}">{{ band }}</p>
+    <p class="text-xs text-slate-500 mt-6">Get yours free at <a href="/" class="text-cc-400 hover:text-cc-300 underline">financebuddy.com</a></p>
+  </div>
+</div>
+{% endblock %}
+

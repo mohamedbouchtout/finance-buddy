@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% block title %}Finance Buddy — See what's really in your portfolio{% endblock %}</title>
+  <meta name="description" content="Find out your true Mag-7 exposure with ETF look-through, then run a 200MA retest algo scanner on your watchlist. Built for retail investors." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23000'/%3E%3Ctext x='50%25' y='62%25' text-anchor='middle' font-size='62' fill='%233b82f6' font-family='Inter,sans-serif' font-weight='800'%3EC%3C/text%3E%3C/svg%3E" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            ink: { 950: '#000000', 900: '#06070a', 800: '#0b0d12', 700: '#11141b', 600: '#1a1f2b' },
+            cc:  { 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', cyan: '#06b6d4' },
+          },
+          boxShadow: {
+            glow: '0 0 40px -10px rgba(59,130,246,.55)',
+            'glow-lg': '0 0 80px -10px rgba(59,130,246,.75)',
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-ink-950 text-slate-100 font-sans antialiased min-h-screen relative overflow-x-hidden">
+  <!-- ambient background -->
+  <div class="pointer-events-none fixed inset-0 -z-10">
+    <div class="absolute -top-32 -left-32 w-[40rem] h-[40rem] rounded-full bg-cc-600/20 blur-3xl"></div>
+    <div class="absolute top-1/3 -right-32 w-[32rem] h-[32rem] rounded-full bg-cc-cyan/10 blur-3xl"></div>
+    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60rem] h-[28rem] rounded-full bg-cc-500/10 blur-3xl"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,.04)_1px,transparent_0)] [background-size:24px_24px]"></div>
+  </div>
+
+  <header class="sticky top-0 z-40 backdrop-blur-xl bg-ink-950/70 border-b border-white/5">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="group flex items-center gap-2 font-extrabold text-lg tracking-tight">
+        <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-cc-500 to-cc-cyan flex items-center justify-center text-ink-950 font-black shadow-glow group-hover:shadow-glow-lg transition-all">C</span>
+        <span class="bg-gradient-to-r from-white to-cc-400 bg-clip-text text-transparent">Finance Buddy</span>
+      </a>
+      <nav class="flex items-center gap-1 text-sm">
+        <a href="/analyze" class="px-3 py-1.5 rounded-lg hover:bg-white/5 transition text-slate-300 hover:text-white">Analyze</a>
+        <a href="/bot" class="px-3 py-1.5 rounded-lg hover:bg-white/5 transition text-slate-300 hover:text-white flex items-center gap-1.5">
+          Algo Bot <span class="text-[10px] px-1.5 py-0.5 rounded bg-cc-500/20 text-cc-400 border border-cc-500/30 font-semibold">NEW</span>
+        </a>
+        <a href="/pricing" class="px-3 py-1.5 rounded-lg hover:bg-white/5 transition text-slate-300 hover:text-white">Pricing</a>
+        {% if user %}
+          <a href="/dashboard" class="px-3 py-1.5 rounded-lg hover:bg-white/5 transition text-slate-300 hover:text-white">Dashboard</a>
+          <form action="/logout" method="post" class="inline"><button class="px-3 py-1.5 rounded-lg hover:bg-white/5 text-slate-500 hover:text-slate-300 transition">Sign out</button></form>
+        {% else %}
+          <a href="/login" class="ml-2 px-4 py-1.5 rounded-lg bg-gradient-to-r from-cc-500 to-cc-600 text-white font-semibold hover:shadow-glow transition-all">Sign in</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  {% if dev_mode %}
+  <div class="bg-amber-500/10 text-amber-300 text-xs text-center py-1.5 border-b border-amber-500/20">
+    Dev mode — Stripe not configured. Magic-link emails print to server console. Upgrade flow auto-completes.
+  </div>
+  {% endif %}
+
+  <main class="max-w-6xl mx-auto px-4 py-10 relative">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="border-t border-white/5 mt-20">
+    <div class="max-w-6xl mx-auto px-4 py-8 text-xs text-slate-500 flex flex-col md:flex-row gap-3 md:justify-between">
+      <div>© Finance Buddy. Educational tool — not investment advice.</div>
+      <div class="space-x-5">
+        <a href="/pricing" class="hover:text-cc-400 transition">Pricing</a>
+        <a href="/analyze" class="hover:text-cc-400 transition">Analyze</a>
+        <a href="/bot" class="hover:text-cc-400 transition">Algo Bot</a>
+        <a href="mailto:hello@financebuddy.com" class="hover:text-cc-400 transition">Contact</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
+

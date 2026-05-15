@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="text-center py-12">
+  <span class="score-pill mb-4">
+    <span class="w-1.5 h-1.5 rounded-full bg-cc-cyan animate-pulse"></span>
+    Algo Signals &mdash; AI Pattern Detection
+  </span>
+  <h1 class="text-4xl md:text-6xl font-black tracking-tighter">
+    An <span class="gradient-text">AI bot</span> that finds<br/>
+    its own setups.
+  </h1>
+  <p class="mt-6 text-lg text-slate-400 max-w-2xl mx-auto">
+    A self-detecting pattern engine &mdash; RBM + CNN models scoring each chart, layered on top of a
+    proven 200MA breakout-and-retest framework, MA-slope, volume, and risk/reward filters.
+    Paper-trade for free. Pro members get a licensed bot they run against their own Interactive Brokers account.
+  </p>
+  <div class="mt-8 flex flex-wrap justify-center gap-3">
+    <a href="/bot/scan" class="btn-primary">Run a scan &rarr;</a>
+    <a href="/pricing" class="btn-secondary">Unlock the live bot</a>
+  </div>
+</section>
+
+<section class="grid md:grid-cols-3 gap-5 my-10">
+  <div class="card">
+    <div class="text-cc-cyan text-sm font-bold mb-1">01 &middot; Detect</div>
+    <h3 class="text-white font-semibold">Self-finding patterns</h3>
+    <p class="text-slate-400 text-sm mt-2">
+      Neural net scores every chart for breakout-then-retest geometry. No watchlist micromanagement &mdash;
+      point it at a universe and the AI surfaces the cleanest setups.
+    </p>
+  </div>
+  <div class="card">
+    <div class="text-cc-cyan text-sm font-bold mb-1">02 &middot; Validate</div>
+    <h3 class="text-white font-semibold">Classical guardrails</h3>
+    <p class="text-slate-400 text-sm mt-2">
+      Every AI candidate is pinned by volume confirmation, 200MA slope, retest tightness, and a
+      minimum 1:2 risk/reward &mdash; the same checks a discretionary trader would run.
+    </p>
+  </div>
+  <div class="card">
+    <div class="text-cc-cyan text-sm font-bold mb-1">03 &middot; Execute</div>
+    <h3 class="text-white font-semibold">Your account, your keys</h3>
+    <p class="text-slate-400 text-sm mt-2">
+      Pro members download a licensed bot bundle and run it locally against their own IB Gateway.
+      We never touch your money or your API keys.
+    </p>
+  </div>
+</section>
+
+<section class="grid md:grid-cols-2 gap-5 my-10">
+  <div class="card">
+    <div class="flex items-center justify-between mb-2">
+      <h3 class="font-bold text-lg text-white">Free &mdash; Paper Mode</h3>
+      <span class="score-pill">$0</span>
+    </div>
+    <ul class="text-sm text-slate-300 space-y-2 mt-4">
+      <li class="flex gap-2"><span class="text-cc-400">&#10003;</span> Scan up to 10 tickers per run</li>
+      <li class="flex gap-2"><span class="text-cc-400">&#10003;</span> Pretrained AI predictor &mdash; every ticker scored 0&ndash;100</li>
+      <li class="flex gap-2"><span class="text-cc-400">&#10003;</span> Direction + setup type + confidence on every result</li>
+      <li class="flex gap-2"><span class="text-cc-400">&#10003;</span> Suggested entry / stop / target (1:2 R:R default)</li>
+      <li class="flex gap-2 text-slate-500"><span>&middot;</span> No real-money bot license</li>
+    </ul>
+    <a href="/bot/scan" class="btn-secondary mt-6 w-full">Start scanning</a>
+  </div>
+
+  <div class="card relative overflow-hidden">
+    <div class="absolute -top-12 -right-12 w-40 h-40 rounded-full bg-cc-500/20 blur-3xl"></div>
+    <div class="flex items-center justify-between mb-2">
+      <h3 class="font-bold text-lg text-white">Pro &mdash; Live Trading</h3>
+      <span class="score-pill" style="border-color:rgba(6,182,212,.35); background:rgba(6,182,212,.1); color:#67e8f9;">$9 / mo</span>
+    </div>
+    <ul class="text-sm text-slate-300 space-y-2 mt-4">
+      <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> Scan up to 200 tickers per run</li>
+      <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> AI predictions + strict 200MA retest signals</li>
+      <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> Backtest any symbol with equity curve</li>
+      <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> <strong class="text-white">Downloadable desktop app</strong> with start/stop, live signal matrix, and risk sliders</li>
+      <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> Licensed bot bundle + heartbeat license</li>
+      <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> Plugs into your local Interactive Brokers</li>
+      <li class="flex gap-2"><span class="text-cc-cyan">&#10003;</span> Everything in the diversification analyzer</li>
+    </ul>
+    <a href="/pricing" class="btn-primary mt-6 w-full">Upgrade to Pro</a>
+  </div>
+</section>
+
+<section class="card my-12 max-w-3xl mx-auto">
+  <h2 class="text-xl font-bold text-white mb-3">How live trading works</h2>
+  <p class="text-slate-400 text-sm">
+    We <strong class="text-white">don't custody your money</strong> or execute trades on your behalf &mdash; that's a
+    regulatory minefield. Instead, Pro subscribers download a personalized config bundle
+    (<code class="text-cc-400">trading_params.json</code> + <code class="text-cc-400">watchlist.json</code> +
+    <code class="text-cc-400">license.json</code> + a heartbeat script) and run the open-source bot locally,
+    connected to their own Interactive Brokers paper or live account.
+  </p>
+  <p class="text-slate-400 text-sm mt-3">
+    Your license phones home every 30 minutes. If your subscription lapses, the bot refuses to run
+    on its next heartbeat &mdash; no orphan algos placing trades on canceled accounts.
+  </p>
+</section>
+{% endblock %}

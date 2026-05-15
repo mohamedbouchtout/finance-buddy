@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="text-3xl font-black tracking-tight text-white mb-4">Admin · last 7 days</h1>
+<div class="card">
+  <table class="w-full text-sm">
+    <thead><tr class="text-left text-xs uppercase text-slate-500">
+      <th class="py-2">Event</th><th class="text-right">Count</th></tr></thead>
+    <tbody>
+      {% for name, n in counts.items() %}
+      <tr><td class="py-2 font-mono text-slate-300">{{ name }}</td>
+          <td class="text-right font-bold text-white">{{ n }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+

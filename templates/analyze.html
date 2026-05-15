@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Analyze your portfolio · Finance Buddy{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto">
+  <h1 class="text-3xl md:text-4xl font-black tracking-tight"><span class="gradient-text">Analyze your portfolio</span></h1>
+  <p class="text-slate-400 mt-2 mb-6">Enter your holdings, one per line. Format: <code class="bg-white/5 text-cc-400 px-1.5 py-0.5 rounded text-xs">TICKER SHARES</code></p>
+
+  {% if error %}
+  <div class="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" action="/analyze" enctype="multipart/form-data" class="card space-y-4">
+    <div>
+      <label class="block text-sm font-semibold mb-2 text-slate-200">Holdings</label>
+      <textarea name="holdings_text" rows="10" class="font-mono text-sm"
+        placeholder="VOO 50&#10;QQQ 25&#10;AAPL 10&#10;NVDA 5&#10;BND 30&#10;GLD 20"></textarea>
+      <p class="text-xs text-slate-500 mt-1">Supports formats: <code>AAPL 10</code>, <code>AAPL,10</code>, <code>AAPL: 10</code></p>
+    </div>
+
+    <details class="text-sm">
+      <summary class="cursor-pointer font-semibold text-slate-300 hover:text-white">Or upload a CSV from your broker</summary>
+      <div class="mt-3">
+        <input type="file" name="csv_file" accept=".csv,text/csv" class="block w-full text-sm" />
+        <p class="text-xs text-slate-500 mt-1">Works with Fidelity, Vanguard, Schwab, and most broker exports. We look for "Symbol" and "Quantity" columns.</p>
+      </div>
+    </details>
+
+    <div class="flex items-center justify-between pt-2">
+      <button type="button" onclick="loadSample()" class="text-sm text-cc-400 hover:text-cc-300 underline-offset-2 hover:underline">Load sample portfolio</button>
+      <button type="submit" class="btn-primary">Analyze →</button>
+    </div>
+  </form>
+
+  <p class="text-xs text-slate-500 mt-4 text-center">
+    Your data stays on this server. Free tier doesn't require an account.
+  </p>
+</div>
+
+<script>
+function loadSample() {
+  document.querySelector('textarea[name=holdings_text]').value =
+    "VOO 80\nQQQ 30\nAAPL 25\nNVDA 15\nMSFT 10\nBND 40\nGLD 20\nVXUS 25";
+}
+</script>
+{% endblock %}
+

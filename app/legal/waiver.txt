@@ -1,0 +1,97 @@
+FINANCE BUDDY — ALGO BOT PRO MEMBERSHIP
+LIABILITY WAIVER, RELEASE, AND ASSUMPTION OF RISK
+Version 1.0 (2026-05)
+
+PLEASE READ THIS DOCUMENT CAREFULLY BEFORE ACCEPTING. BY CLICKING "I AGREE" YOU
+ENTER INTO A BINDING LEGAL AGREEMENT WITH FINANCE BUDDY ("WE", "US", "OUR").
+IF YOU DO NOT AGREE, DO NOT ACCEPT, DO NOT DOWNLOAD OR USE THE BOT, AND DO NOT
+SUBSCRIBE TO PRO.
+
+1. THE SOFTWARE IS A TOOL, NOT ADVICE.
+   Finance Buddy, the Algo Bot desktop application, the AI predictor, the
+   bundled configuration files, and all related materials (collectively, the
+   "Software") are provided for informational and educational purposes only.
+   Nothing produced by the Software — including scores, signals, suggested
+   entries, stops, targets, watchlists, or trades — is investment advice, a
+   recommendation, a solicitation, or an offer to buy or sell any security.
+   We are not a registered broker-dealer, investment adviser, or financial
+   planner.
+
+2. YOU ARE FULLY RESPONSIBLE FOR YOUR OWN TRADES.
+   You alone decide whether to act on any signal produced by the Software. You
+   alone configure your brokerage connection (Interactive Brokers or otherwise),
+   your risk parameters, your position sizing, and your account permissions.
+   Any order placed by the Software is placed using YOUR credentials, against
+   YOUR brokerage account, under YOUR control. We never custody your funds,
+   never hold your API keys, and never execute trades on your behalf.
+
+3. ASSUMPTION OF RISK.
+   Trading equities and other financial instruments — including but not limited
+   to use of margin, leverage, short positions, options, and automated/algorithmic
+   strategies — involves substantial risk of loss, up to and exceeding 100% of
+   the capital you commit. Past performance, backtests, and AI predictions are
+   not indicative of future results. The Software may produce incorrect signals,
+   experience downtime, malfunction, or interact unexpectedly with your broker.
+   You expressly assume all such risks.
+
+4. RELEASE AND WAIVER OF LIABILITY.
+   To the maximum extent permitted by applicable law, you irrevocably release,
+   waive, and forever discharge Finance Buddy, its owners, officers,
+   employees, contractors, affiliates, licensors, and service providers (the
+   "Released Parties") from any and all claims, demands, losses, damages, costs,
+   and expenses of any kind — including but not limited to trading losses,
+   missed profits, slippage, fees, taxes, broker errors, data errors, and
+   consequential, incidental, special, indirect, or punitive damages — arising
+   out of or related to your use of, inability to use, or reliance on the
+   Software, even if any Released Party has been advised of the possibility of
+   such damages.
+
+5. NO WARRANTIES.
+   The Software is provided "AS IS" and "AS AVAILABLE", without warranties of
+   any kind, express or implied, including but not limited to merchantability,
+   fitness for a particular purpose, accuracy, non-infringement, uninterrupted
+   service, or freedom from defects.
+
+6. INDEMNIFICATION.
+   You agree to indemnify, defend, and hold harmless the Released Parties from
+   any claim, demand, or expense (including reasonable legal fees) brought by
+   any third party arising out of (a) your use of the Software, (b) trades you
+   place using the Software, (c) your violation of brokerage terms, or
+   (d) your violation of any law or regulation.
+
+7. ELIGIBILITY AND COMPLIANCE.
+   You represent and warrant that (a) you are of legal age in your jurisdiction
+   to enter binding contracts and to trade securities, (b) your use of the
+   Software complies with all laws, regulations, and brokerage terms applicable
+   to you, and (c) you will test the Software in your broker's PAPER trading
+   environment for a meaningful period before connecting any live account.
+
+8. SUBSCRIPTION AND LICENSE.
+   The Pro membership grants you a personal, non-transferable, revocable license
+   to download and run the bot bundle for the term of your active subscription.
+   The bot is license-gated and will refuse to run if your subscription lapses
+   or is revoked. You may not resell, sublicense, or share the bundle.
+
+9. CAP ON DAMAGES.
+   To the maximum extent permitted by applicable law, the Released Parties'
+   total cumulative liability to you for any claim related to the Software
+   shall not exceed the greater of (a) the total fees you paid to us in the
+   three (3) months immediately preceding the event giving rise to the claim,
+   or (b) one hundred U.S. dollars (USD $100).
+
+10. ENTIRE AGREEMENT; GOVERNING LAW.
+    This waiver, together with the Finance Buddy Terms of Service, is the
+    entire agreement between you and us regarding the Pro membership and Algo
+    Bot. It is governed by the laws of the Commonwealth of Massachusetts, USA,
+    without regard to its conflict of laws principles. If any provision is held
+    unenforceable, the remaining provisions will remain in full force.
+
+ACKNOWLEDGEMENT
+By clicking "I AGREE — Activate Pro" you confirm that (i) you have read and
+understood this entire waiver, (ii) you accept all of its terms, (iii) you are
+not relying on any oral or written representation outside of this document, and
+(iv) you assume all risks of using the Software and of any trade you place with
+or as a result of it.
+
+Finance Buddy will record the date, time, IP address, account email, and
+waiver version of your acceptance.

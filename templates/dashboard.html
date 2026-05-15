@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+  <div>
+    <h1 class="text-3xl font-black tracking-tight text-white">Dashboard</h1>
+    <p class="text-slate-500 text-sm">{{ user.email }} · {% if is_pro %}<span class="text-cc-400 font-semibold">PRO</span>{% else %}Free{% endif %}</p>
+  </div>
+  <div class="flex gap-2">
+    <a href="/analyze" class="btn-secondary">New analysis</a>
+    <a href="/bot/scan" class="btn-secondary">Run algo scan</a>
+    {% if is_pro %}
+      <a href="/account/license" class="btn-secondary">Bot license</a>
+    {% endif %}
+    {% if is_pro and user.stripe_customer_id %}
+      <form action="/billing/portal" method="post"><button class="btn-secondary">Manage billing</button></form>
+    {% elif not is_pro %}
+      <a href="/pricing" class="btn-primary">Upgrade to Pro</a>
+    {% endif %}
+  </div>
+</div>
+
+{% if portfolios %}
+<div class="grid md:grid-cols-2 gap-4">
+  {% for p in portfolios %}
+  <div class="card flex items-center justify-between">
+    <div>
+      <h3 class="font-bold text-white">{{ p.name }}</h3>
+      <p class="text-xs text-slate-500">Saved {{ p.created_at }}</p>
+    </div>
+    <div class="flex gap-2">
+      <a href="/portfolios/{{ p.id }}" class="btn-secondary">View</a>
+      <form action="/portfolios/{{ p.id }}/delete" method="post" onsubmit="return confirm('Delete this portfolio?')">
+        <button class="text-sm text-red-400 hover:text-red-300">Delete</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="card text-center py-12">
+  <p class="text-slate-400">No saved portfolios yet.</p>
+  {% if is_pro %}
+    <a href="/analyze" class="btn-primary mt-4 inline-block">Run your first analysis →</a>
+  {% else %}
+    <p class="text-sm text-slate-500 mt-2">Saving portfolios is a Pro feature.</p>
+    <a href="/pricing" class="btn-primary mt-4 inline-block">Upgrade to Pro</a>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}
+

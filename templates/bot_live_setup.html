@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="max-w-3xl mx-auto">
+  <h1 class="text-3xl md:text-4xl font-black tracking-tight"><span class="gradient-text">Live trading setup</span></h1>
+  <p class="text-slate-400 mt-2">Run the AI signal bot locally against your own Interactive Brokers account.</p>
+
+  <div class="card mt-6 space-y-4">
+    <ol class="list-decimal list-inside space-y-3 text-slate-300 text-sm">
+      <li>Open or clone the open-source <strong class="text-white">Algo-Bot</strong> repo on your machine.</li>
+      <li>Run a scan here and download your config bundle from the results page.</li>
+      <li>Drop <code class="text-cc-400 font-mono text-xs">trading_params.json</code> into <code class="text-cc-400 font-mono text-xs">&lt;algo-bot&gt;/config/</code>.</li>
+      <li>Copy <code class="text-cc-400 font-mono text-xs">license.json</code> and <code class="text-cc-400 font-mono text-xs">license_check.py</code> to the algo-bot root.</li>
+      <li>At the top of <code class="text-cc-400 font-mono text-xs">main.py</code>, add: <code class="text-cc-cyan font-mono text-xs">from license_check import verify; verify(strict=True)</code></li>
+      <li>Save <code class="text-cc-400 font-mono text-xs">watchlist.json</code> where your StockTickerFetcher reads from.</li>
+      <li>Start IB Gateway or TWS in paper mode first &mdash; flip to live only when you've verified everything.</li>
+      <li>From the algo-bot directory: <code class="text-cc-400 font-mono text-xs">python main.py</code></li>
+    </ol>
+  </div>
+
+  <div class="card mt-6 border-cc-cyan/20">
+    <h2 class="text-white font-bold mb-2">Your license, your kill-switch</h2>
+    <p class="text-slate-400 text-sm">
+      Every bundle includes a license key tied to your account. The bot phones home every 30 minutes.
+      Cancel your subscription and the next heartbeat returns invalid &mdash; the bot exits and stops placing trades.
+      You can also <a href="/account/license" class="text-cc-cyan hover:underline">manually revoke or regenerate</a> at any time.
+    </p>
+  </div>
+
+  <div class="card mt-6 border-amber-500/30 bg-amber-500/[0.04]">
+    <h2 class="text-amber-300 font-bold">&#9888; Risk reminder</h2>
+    <p class="text-amber-200/80 text-sm mt-2">
+      We don't custody funds or execute on your behalf. You're responsible for verifying every signal and trade.
+      Test in IB paper mode for at least a few weeks before connecting real money. Finance Buddy is an
+      educational tool, not investment advice.
+    </p>
+  </div>
+
+  <div class="text-center mt-8 flex gap-3 justify-center flex-wrap">
+    <a href="/bot/scan" class="btn-primary">Run a scan to generate your bundle &rarr;</a>
+    <a href="/account/license" class="btn-secondary">Manage license</a>
+  </div>
+</section>
+{% endblock %}

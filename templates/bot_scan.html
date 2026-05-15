@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="max-w-3xl mx-auto">
+  <h1 class="text-3xl md:text-4xl font-black tracking-tight">
+    <span class="gradient-text">Signal scan</span>
+  </h1>
+  <p class="text-slate-400 mt-2">Find AI-detected breakout-and-retest setups across a ticker list. Free plan: up to <strong class="text-white">{{ cap }}</strong> tickers per scan.</p>
+
+  {% if error %}<div class="mt-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm">{{ error }}</div>{% endif %}
+
+  <form method="post" action="/bot/scan" class="card mt-6 space-y-4">
+    <label class="block">
+      <span class="text-sm font-semibold text-slate-200">Tickers</span>
+      <textarea name="tickers_text" rows="3" placeholder="AAPL MSFT NVDA SPY QQQ ...">{{ default_tickers }}</textarea>
+      <span class="text-xs text-slate-500 mt-1 block">Separate by spaces, commas, or new lines.</span>
+    </label>
+
+    <label class="flex items-center gap-2 text-sm text-slate-300">
+      <input type="checkbox" name="do_backtest" value="1" class="w-4 h-4" />
+      Also run a historical backtest on the first ticker
+    </label>
+
+    {% if is_pro %}
+    <label class="block">
+      <span class="text-sm font-semibold text-slate-200">Pro: backtest a specific symbol</span>
+      <input type="text" name="backtest_symbol" placeholder="e.g. NVDA" />
+    </label>
+    {% endif %}
+
+    <button class="btn-primary w-full">Run scan →</button>
+  </form>
+
+  <p class="text-xs text-slate-500 mt-4 text-center">
+    Educational tool — not investment advice. Past signals don't guarantee future returns.
+  </p>
+</section>
+{% endblock %}

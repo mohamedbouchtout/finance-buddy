@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="text-center py-16 md:py-24 relative">
+  <span class="score-pill mb-6">
+    <span class="w-1.5 h-1.5 rounded-full bg-cc-400 animate-pulse"></span>
+    You're probably more concentrated than you think
+  </span>
+  <h1 class="text-5xl md:text-7xl font-black tracking-tighter max-w-5xl mx-auto leading-[1.05]">
+    You think you own<br/>the S&amp;P 500.<br/>
+    <span class="gradient-text">You actually own<br/>7 tech stocks.</span>
+  </h1>
+  <p class="mt-8 text-lg md:text-xl text-slate-400 max-w-2xl mx-auto">
+    Paste your holdings. Get your true diversification score in 30 seconds — with full ETF look-through.
+    Then turn on the algo signal scanner.
+  </p>
+  <div class="mt-10 flex flex-wrap justify-center gap-3">
+    <a href="/analyze" class="btn-primary text-base">Analyze my portfolio →</a>
+    <a href="/bot" class="btn-secondary text-base">
+      <span class="inline-block w-2 h-2 rounded-full bg-cc-400 mr-2 animate-pulse"></span>
+      Try the algo bot
+    </a>
+  </div>
+  <p class="mt-4 text-xs text-slate-500">No account needed. Free analysis. Educational, not advice.</p>
+</section>
+
+<section id="how" class="grid md:grid-cols-3 gap-5 my-14">
+  <div class="card">
+    <div class="w-10 h-10 rounded-lg bg-cc-500/10 border border-cc-500/30 flex items-center justify-center text-cc-400 font-bold mb-3">01</div>
+    <h3 class="font-bold text-lg text-white">Paste holdings</h3>
+    <p class="text-sm text-slate-400 mt-2">Type tickers and shares, or paste a CSV from Fidelity, Vanguard, or Schwab.</p>
+  </div>
+  <div class="card">
+    <div class="w-10 h-10 rounded-lg bg-cc-500/10 border border-cc-500/30 flex items-center justify-center text-cc-400 font-bold mb-3">02</div>
+    <h3 class="font-bold text-lg text-white">ETF look-through</h3>
+    <p class="text-sm text-slate-400 mt-2">Top 40 retail ETFs decomposed into their underlying holdings — see your <em class="text-slate-200">true</em> exposure.</p>
+  </div>
+  <div class="card">
+    <div class="w-10 h-10 rounded-lg bg-cc-500/10 border border-cc-500/30 flex items-center justify-center text-cc-400 font-bold mb-3">03</div>
+    <h3 class="font-bold text-lg text-white">Score + signals</h3>
+    <p class="text-sm text-slate-400 mt-2">0–100 diversification score, Mag 7 %, plus on-demand 200MA breakout signals.</p>
+  </div>
+</section>
+
+<section class="my-16 max-w-3xl mx-auto card">
+  <h2 class="text-2xl font-bold mb-4 text-white">Why this exists</h2>
+  <div class="prose">
+    <p>
+      In 2026 the S&amp;P 500 is the most concentrated it has ever been — the top 7 stocks make up
+      around 35% of the index. If you also hold QQQ, VUG, or any tech-heavy ETF on top of an S&amp;P 500
+      fund, you might have <strong class="text-white">50–60% of your portfolio</strong> in just seven companies and not know it.
+    </p>
+    <p>
+      Finance Buddy decomposes your ETFs into their underlying holdings, then re-aggregates
+      everything to show your real exposure across stocks, sectors, regions, and asset classes.
+    </p>
+    <p>
+      This is an educational tool. We don't tell you what to buy or sell. We show you the math
+      behind what you already own — and, with Pro, you can take our signal scanner home and plug it
+      into your own broker.
+    </p>
+  </div>
+</section>
+
+<section class="text-center my-16">
+  <a href="/analyze" class="btn-primary text-base">Get my score →</a>
+</section>
+{% endblock %}
+

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Liability Waiver — Finance Buddy Pro{% endblock %}
+{% block content %}
+<section class="max-w-3xl mx-auto">
+  <span class="score-pill mb-3">
+    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+    Required before activating Pro
+  </span>
+  <h1 class="text-3xl md:text-4xl font-black tracking-tight">
+    <span class="gradient-text">Pro Membership</span> Liability Waiver
+  </h1>
+  <p class="text-slate-400 mt-2">
+    Live and paper trading software carries real risk. Please read this in full before continuing.
+    {% if already_accepted %}
+      <span class="text-cc-cyan">You've already accepted version {{ accepted_version }} on
+      {{ accepted_at_str }}.</span>
+    {% endif %}
+  </p>
+
+  <div class="card mt-6 max-h-[60vh] overflow-y-auto whitespace-pre-wrap font-mono text-xs leading-relaxed text-slate-300">{{ waiver_text }}</div>
+
+  {% if not already_accepted %}
+  <form action="/waiver/accept" method="post" class="card mt-6 space-y-4">
+    <input type="hidden" name="next" value="{{ next }}" />
+    <input type="hidden" name="version" value="{{ version }}" />
+    <label class="flex items-start gap-3 cursor-pointer">
+      <input type="checkbox" name="confirm" value="yes" required
+             class="mt-1 w-4 h-4 accent-cc-500" />
+      <span class="text-sm text-slate-300">
+        I have read the full waiver above. I understand that Finance Buddy
+        is an educational tool, that all trading decisions are mine alone, and that
+        I release Finance Buddy from all liability for any losses arising from
+        my use of the Algo Bot software. I am signing this agreement as
+        <strong class="text-white">{{ user.email if user else "(please sign in)" }}</strong>.
+      </span>
+    </label>
+    <button type="submit" class="btn-primary w-full" {% if not user %}disabled{% endif %}>
+      I agree — activate Pro &amp; download the bot
+    </button>
+    {% if not user %}
+      <p class="text-xs text-slate-500 text-center">
+        <a href="/login?next=/waiver" class="text-cc-cyan hover:underline">Sign in</a> to sign the waiver.
+      </p>
+    {% endif %}
+  </form>
+  {% else %}
+  <div class="flex flex-wrap gap-3 justify-center mt-6">
+    <a href="/bot/app" class="btn-primary">Continue to the bot download &rarr;</a>
+    <a href="/dashboard" class="btn-secondary">Back to dashboard</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

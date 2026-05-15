@@ -1,0 +1,31 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+.env
+.env.local
+data/app.db
+data/app.db-*
+data/test_app.db
+data/test_app.db-*
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+Thumbs.db
+*.egg-info/
+build/
+dist/
+*.log
+.idea/
+.vscode/
+# Desktop bot runtime artifacts
+app/algo_bot/desktop/.bot_state.json
+app/algo_bot/desktop/bot_app_error.log
+app/algo_bot/desktop/.deps_installed
+app/algo_bot/desktop/license.json
+app/algo_bot/desktop/waiver_acceptance.json
+# Generated bundles
+*.zip
