@@ -577,16 +577,13 @@ class BotApp(tk.Tk):
 
         brand = tk.Frame(header, bg=T["ink_900"])
         brand.pack(side="left", padx=22, pady=14)
-        logo = tk.Label(brand, text="C", bg=T["cc_500"], fg=T["ink_950"],
-                        font=(self.font_display, 14, "bold"), width=2, height=1, bd=0)
-        logo.pack(side="left", padx=(0, 10), ipadx=2, ipady=2)
         title_box = tk.Frame(brand, bg=T["ink_900"])
         title_box.pack(side="left")
         tk.Label(title_box, text="Finance Buddy",
-                 bg=T["ink_900"], fg=T["slate_100"],
-                 font=(self.font_display, 14, "bold")).pack(anchor="w")
-        tk.Label(title_box, text="Algo Bot  ·  Desktop Terminal",
                  bg=T["ink_900"], fg=T["cc_400"],
+                 font=(self.font_display, 16, "bold")).pack(anchor="w")
+        tk.Label(title_box, text="Algo Bot  ·  Desktop Terminal",
+                 bg=T["ink_900"], fg=T["slate_500"],
                  font=(self.font_ui, 9)).pack(anchor="w")
 
         # status pill on the right
